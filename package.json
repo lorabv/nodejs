@@ -1,0 +1,14 @@
+{
+  "name": "week2-homework",
+  "version": "1.0.0",
+  "description": "Week 2 Homework for the JS Crash Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lora V",
+  "license": "MIT",
+  "dependencies": {
+    "json-stringify-safe": "^5.0.1"
+  }
+}
