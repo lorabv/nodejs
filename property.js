@@ -9,6 +9,10 @@ module.exports = class Property {
         this.applications = [];
     }
 
+    static create(obj) {
+        return new Property(obj.address, obj.price, obj.owner, obj.rent, obj.deposit, obj.tenant);
+    }
+
     setApplication({name, age, address}){
         this.applications.push({name, age, address});
     }

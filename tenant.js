@@ -5,6 +5,10 @@ module.exports = class Tenant extends Person {
         super(name, age, address, money);
     }
 
+    static create(obj) {
+        return new Tenant(obj.name, obj.age, obj.address, obj.money);
+    }
+
     applyForProperty(property) {
         property.setApplication(this);
     }

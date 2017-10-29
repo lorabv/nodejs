@@ -6,6 +6,10 @@ module.exports = class Landlord extends Person {
         this.properties = [];
     }
 
+    static create(obj) {
+        return new Landlord(obj.name, obj.age, obj.address, obj.money, obj.properties);
+    }
+
     buyProperty(property) {
         this.properties.push(property);
     }

@@ -6,6 +6,10 @@ module.exports = class Person {
         this.money = money;
     }
 
+    static create(obj) {
+        return new Person(obj.name, obj.age, obj.address, obj.money);
+    }
+
     receiveMoney(amount) {
         this.money = this.money + amount;
     }
