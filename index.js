@@ -22,17 +22,21 @@ tenant.applyForProperty(property);
 landlord.letProperty(property, tenant);
 tenant.rentProperty(property);
 
-Database.saveLandlord(landlords);
-const loadLandlords = Database.loadLandlord();
-const convertedLandlords = loadLandlords.map(Landlord.create);
-console.log(convertedLandlords);
+const main = async () => {
+    await Database.saveLandlords(landlords);
+    const loadLandlords = await Database.loadLandlords();
+    const convertedLandlords = loadLandlords.map(Landlord.create);
+    console.log(convertedLandlords);
 
-Database.saveTenant(tenants);
-const loadTenants = Database.loadTenant();
-const convertedTenants = loadTenants.map(Tenant.create);
-console.log(convertedTenants);
+    await Database.saveTenants(tenants);  
+    const loadTenants = await Database.loadTenants();
+    const convertedTenants = loadTenants.map(Tenant.create);
+    console.log(convertedTenants);
 
-Database.saveProperty(properties);
-const loadProperties = Database.loadProperty();
-const convertedProperties = loadProperties.map(Property.create);
-console.log(convertedProperties);
+    await Database.saveProperties(properties);    
+    const loadProperties = await Database.loadProperties();
+    const convertedProperties = loadProperties.map(Property.create);
+    console.log(convertedProperties);
+}
+
+main();

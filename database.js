@@ -1,17 +1,34 @@
 const fs = require('fs');
 var stringify = require('json-stringify-safe');
 
-save = (file, person) => fs.writeFileSync(file, stringify(person));
-load = file => JSON.parse(fs.readFileSync(file, 'utf8'));
+const saveFile = async (file, obj) => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file, stringify(obj), (err, contents) => {
+            if (err) return reject(err);
+
+            resolve(contents);
+        })
+    })
+}
+
+const readFile = async (filename) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filename, 'utf8', (err, contents) => {
+            if (err) return reject(err);
+
+            resolve(JSON.parse(contents));
+        })
+    })
+}
 
 const DATA_LANDLORD = './dataLandlord.json';
-exports.saveLandlord = landlord => save(DATA_LANDLORD, landlord);
-exports.loadLandlord = () => JSON.parse(fs.readFileSync(DATA_LANDLORD, 'utf8'));
+exports.saveLandlords = async (landlord) => await saveFile(DATA_LANDLORD, landlord);
+exports.loadLandlords = async () => await readFile(DATA_LANDLORD);
 
 const DATA_TENANT = './dataTenant.json';
-exports.saveTenant = tenant => save(DATA_TENANT, tenant);
-exports.loadTenant = () => JSON.parse(fs.readFileSync(DATA_TENANT, 'utf8'));
+exports.saveTenants = async (tenant) => await saveFile(DATA_TENANT, tenant);
+exports.loadTenants = async () => await readFile(DATA_TENANT);
 
 const DATA_PROPERTY = './dataProperty.json';
-exports.saveProperty = property => save(DATA_PROPERTY, property);
-exports.loadProperty = () => JSON.parse(fs.readFileSync(DATA_PROPERTY, 'utf8'));
+exports.saveProperties = async (property) => await saveFile(DATA_PROPERTY, property);
+exports.loadProperties = async () => await readFile(DATA_PROPERTY);
