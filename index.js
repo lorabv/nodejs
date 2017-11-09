@@ -1,42 +1,64 @@
-const Landlord = require('./landlord');
-const Tenant = require('./tenant');
-const Property = require('./property');
-const Database = require('./database');
+const express = require('express');
+const bodyParser = require('body-parser');
+const LandlordService = require('./services/landlord-service');
+const TenantService = require('./services/tenant-service');
+const PropertyService = require('./services/property-service');
 
-const landlords = [];
-const tenants = [];
-const properties = [];
+const app = express();
+app.set('view engine', 'pug');
+app.use(bodyParser.json());
+app.get('/', (req, res, next) => {
+    res.render('index');
+});
 
-const landlord = new Landlord('Lora', 30, 'Berlin', 300000);
-landlords.push(landlord);
-const tenant = new Tenant('Brian', 40, 'Berlin', 6000);
-tenants.push(tenant);
-const property = new Property('Berlin', 100000);
-properties.push(property);
+app.get('/landlord/all', async (req, res, next) => {
+    const landlords = await LandlordService.findAll();
+    res.render('landlord', { landlords });
+});
 
-landlord.buyProperty(property);
-property.setOwner(landlord)
-landlord.properties[0].setDeposit(1000);
-landlord.properties[0].setRent(500);
-tenant.applyForProperty(property);
-landlord.letProperty(property, tenant);
-tenant.rentProperty(property);
+app.post('/landlord', async (req, res, next) => {
+    const landlord = await LandlordService.add(req.body);
+    //console.log(req.body);
+    res.send(landlord);
+});
 
-const main = async () => {
-    await Database.saveLandlords(landlords);
-    const loadLandlords = await Database.loadLandlords();
-    const convertedLandlords = loadLandlords.map(Landlord.create);
-    console.log(convertedLandlords);
+app.delete('/landlord/:landlordId', async (req, res, next) => {
+    await LandlordService.del(req.params.landlordId);
+    res.send('OK');
+});
 
-    await Database.saveTenants(tenants);  
-    const loadTenants = await Database.loadTenants();
-    const convertedTenants = loadTenants.map(Tenant.create);
-    console.log(convertedTenants);
+app.get('/tenant/all', async (req, res, next) => {
+    const tenants = await TenantService.findAll();
+    res.render('tenant', { tenants });
+});
 
-    await Database.saveProperties(properties);    
-    const loadProperties = await Database.loadProperties();
-    const convertedProperties = loadProperties.map(Property.create);
-    console.log(convertedProperties);
-}
+app.post('/tenant', async (req, res, next) => {
+    const tenant = await TenantService.add(req.body);
+    //console.log(req.body);
+    res.send(tenant);
+});
 
-main();
+app.delete('/tenant/:tenantId', async (req, res, next) => {
+    await TenantService.del(req.params.tenantId);
+    res.send('OK');
+});
+
+app.get('/propety/all', async (req, res, next) => {
+    const propeties = await PropetyService.findAll();
+    res.render('propety', { propeties });
+});
+
+app.post('/propety', async (req, res, next) => {
+    const propety = await PropetyService.add(req.body);
+    //console.log(req.body);
+    res.send(propety);
+});
+
+app.delete('/propety/:propetyId', async (req, res, next) => {
+    await PropetyService.del(req.params.propetyId);
+    res.send('OK');
+});
+
+app.listen(3000, () => {
+    console.log('Server listening on post 3000');
+});
